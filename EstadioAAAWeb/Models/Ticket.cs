@@ -13,13 +13,16 @@ namespace EstadioAAAWeb.Models
         [Required]
         [Display(Name ="ID Ticket")]
         public string TicketUUID { get; set; }
-        [ForeignKey("UserRUT")]
+        [ForeignKey("User")]
         [Required]
         [Display(Name = "RUT Asociado")]
         public string UserRUT { get; set; }
-        [ForeignKey("EventUUID")]
+        [ForeignKey("Event")]
         [Required]
         [Display(Name = "ID Evento")]
         public string EventUUID { get; set; }
+
+        public User User { get; set; }
+        public Event Event { get; set; }
     }
 }

@@ -10,9 +10,10 @@ namespace EstadioAAAWeb.Models
     public class Admin
     {
         [Key]
-        [ForeignKey("UserUUID")]
-        public string UserUUID { get; set; }
+        public string AdminKey { get; set; }
         [Required]
         public string AdminPass { get; set; }
+
+        public User User { get; set; }
     }
 }

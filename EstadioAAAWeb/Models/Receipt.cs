@@ -15,11 +15,12 @@ namespace EstadioAAAWeb.Models
         public string ReceiptUUID { get; set; }
         [Required]
         [Display(Name = "ID Ticket")]
-        [ForeignKey("TicketUUID")]
+        [ForeignKey("Ticket")]
         public string TicketUUID { get; set; }
         [Required]
         [Display(Name = "Valor Total")]
         public int TotalCost { get; set; }
 
+        public Ticket Ticket { get; set; }
     }
 }
