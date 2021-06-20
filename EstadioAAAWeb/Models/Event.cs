@@ -34,12 +34,6 @@ namespace EstadioAAAWeb.Models
         [Display(Name = "Organizador")]
         public string EventOrg { get; set; }
 
-        [ForeignKey("User")]
-        [Display(Name = "ID del Usuario")]
-        public string UserUUID { get; set; }
-
-        public User User { get; set; }
-        
 
     }
 }

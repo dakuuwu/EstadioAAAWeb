@@ -1,4 +1,5 @@
 using EstadioAAAWeb.Data;
+using EstadioAAAWeb.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,13 +33,14 @@ namespace EstadioAAAWeb
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -66,6 +68,45 @@ namespace EstadioAAAWeb
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+            CreateRoles(serviceProvider).GetAwaiter().GetResult();
+        }
+
+        private async Task CreateRoles(IServiceProvider serviceProvider)
+        {
+            //Inicialización de roles
+            var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var UserManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            string[] roleNames = { "Administrador", "Miembro" };
+            IdentityResult roleResult;
+
+            foreach (var roleName in roleNames)
+            {
+                var roleExist = await RoleManager.RoleExistsAsync(roleName);
+                if (!roleExist)
+                {
+                    roleResult = await RoleManager.CreateAsync(new IdentityRole(roleName));
+                }
+            }
+
+            //Creación ADMIN
+            var superuser = new ApplicationUser
+            {
+                UserName = Configuration["AppSettings:UsernameADM"],
+                Email = Configuration["AppSettings:UserEmailADM"],
+                RUT = Configuration["AppSettings:UserRUTADM"],
+                EmailConfirmed = true
+            };
+            string userPWD = Configuration["AppSettings:UserPasswordADM"];
+            var _user = await UserManager.FindByEmailAsync(Configuration["AppSettings:UserEmailADM"]);
+
+            if (_user == null)
+            {
+                var createPowerUser = await UserManager.CreateAsync(superuser, userPWD);
+                if (createPowerUser.Succeeded)
+                {
+                    await UserManager.AddToRoleAsync(superuser, "Administrador");
+                }
+            }
         }
     }
 }

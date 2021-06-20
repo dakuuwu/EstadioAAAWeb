@@ -22,7 +22,6 @@ namespace EstadioAAAWeb.Models
         [Display(Name = "ID Evento")]
         public string EventUUID { get; set; }
 
-        public User User { get; set; }
         public Event Event { get; set; }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EstadioAAAWeb.Models
 {
-    public class User
+    public class AppUser
     {
         [Key]
         [Required]
@@ -20,8 +20,6 @@ namespace EstadioAAAWeb.Models
         [Required]
         [Display(Name = "E-Mail Usuario")]
         public string Email { get; set; }
-        [Required]
-        [Display(Name = "RUT")]
-        public string RUT { get; set; }
+        
     }
 }
