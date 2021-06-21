@@ -25,10 +25,10 @@ namespace EstadioAAAWeb.Models
         [Display(Name = "Descripción del Evento")]
         public string EventDesc { get; set; }
 
-        [Display(Name = "Fecha del Evento")]
+        [Display(Name = "Quorum del Evento")]
         public int EventQuorum { get; set; }
 
-        [Display(Name = "Fecha del Evento")]
+        [Display(Name = "Valor de Entrada")]
         public int EventFee { get; set; }
 
         [Display(Name = "Organizador")]

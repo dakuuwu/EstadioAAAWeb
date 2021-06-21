@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EstadioAAAWeb.Data;
 using EstadioAAAWeb.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EstadioAAAWeb.Controllers
 {
@@ -46,6 +47,7 @@ namespace EstadioAAAWeb.Controllers
         }
 
         // GET: Receipts/Create
+        [Authorize(Policy = "RequireAdministratorRole")]
         public IActionResult Create()
         {
             ViewData["TicketUUID"] = new SelectList(_context.Ticket, "TicketUUID", "TicketUUID");
@@ -57,6 +59,7 @@ namespace EstadioAAAWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "RequireAdministratorRole")]
         public async Task<IActionResult> Create([Bind("ReceiptUUID,TicketUUID,TotalCost")] Receipt receipt)
         {
             if (ModelState.IsValid)
@@ -70,6 +73,7 @@ namespace EstadioAAAWeb.Controllers
         }
 
         // GET: Receipts/Edit/5
+        [Authorize(Policy = "RequireAdministratorRole")]
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
@@ -91,6 +95,7 @@ namespace EstadioAAAWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "RequireAdministratorRole")]
         public async Task<IActionResult> Edit(string id, [Bind("ReceiptUUID,TicketUUID,TotalCost")] Receipt receipt)
         {
             if (id != receipt.ReceiptUUID)
@@ -123,6 +128,7 @@ namespace EstadioAAAWeb.Controllers
         }
 
         // GET: Receipts/Delete/5
+        [Authorize(Policy = "RequireAdministratorRole")]
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
@@ -144,6 +150,7 @@ namespace EstadioAAAWeb.Controllers
         // POST: Receipts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "RequireAdministratorRole")]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var receipt = await _context.Receipt.FindAsync(id);

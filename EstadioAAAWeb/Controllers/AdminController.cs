@@ -1,5 +1,6 @@
 ﻿using EstadioAAAWeb.Data;
 using EstadioAAAWeb.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace EstadioAAAWeb.Controllers
 {
+    [Authorize(Policy = "RequireAdministratorRole")]
     public class AdminController : Controller
     {
         private readonly RoleManager<IdentityRole> roleManager;

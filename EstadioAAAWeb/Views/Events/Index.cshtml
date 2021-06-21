@@ -1,65 +1,73 @@
 ﻿@model IEnumerable<EstadioAAAWeb.Models.Event>
-
+@using Microsoft.AspNetCore.Authorization;
+@inject IAuthorizationService AuthorizationService
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.EventName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EventDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EventDesc)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EventQuorum)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EventFee)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EventOrg)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.EventName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EventDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EventDesc)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EventQuorum)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EventFee)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EventOrg)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.EventUUID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.EventUUID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.EventUUID">Delete</a>
-            </td>
-        </tr>
+<h1>Lista de Eventos</h1>
+@if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdministratorRole")).Succeeded)
+{
+    <p>
+        <a class="btn-primary btn" asp-action="Create">Crear Nuevo</a>
+    </p>
 }
-    </tbody>
-</table>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.EventName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EventDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EventDesc)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EventQuorum)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EventFee)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EventOrg)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EventName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EventDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EventDesc)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EventQuorum)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EventFee)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EventOrg)
+                    </td>
+                    <td>
+
+                        <a class="btn-primary btn" asp-action="Details" asp-route-id="@item.EventUUID">Detalles</a>
+                        @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdministratorRole")).Succeeded)
+                        {<a class="btn-primary btn" asp-action="Edit" asp-route-id="@item.EventUUID">Editar</a>
+                            <a class="btn-danger btn" asp-action="Delete" asp-route-id="@item.EventUUID">Eliminar</a>}
+
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>

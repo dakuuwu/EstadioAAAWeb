@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EstadioAAAWeb.Data;
 using EstadioAAAWeb.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EstadioAAAWeb.Controllers
 {
@@ -44,6 +45,7 @@ namespace EstadioAAAWeb.Controllers
         }
 
         // GET: Events/Create
+        [Authorize(Policy = "RequireAdministratorRole")]
         public IActionResult Create()
         {
             return View();
@@ -54,6 +56,7 @@ namespace EstadioAAAWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "RequireAdministratorRole")]
         public async Task<IActionResult> Create([Bind("EventUUID,EventName,EventDate,EventDesc,EventQuorum,EventFee,EventOrg")] Event @event)
         {
             if (ModelState.IsValid)
@@ -66,6 +69,7 @@ namespace EstadioAAAWeb.Controllers
         }
 
         // GET: Events/Edit/5
+        [Authorize(Policy = "RequireAdministratorRole")]
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
@@ -86,6 +90,7 @@ namespace EstadioAAAWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "RequireAdministratorRole")]
         public async Task<IActionResult> Edit(string id, [Bind("EventUUID,EventName,EventDate,EventDesc,EventQuorum,EventFee,EventOrg")] Event @event)
         {
             if (id != @event.EventUUID)
@@ -117,6 +122,7 @@ namespace EstadioAAAWeb.Controllers
         }
 
         // GET: Events/Delete/5
+        [Authorize(Policy = "RequireAdministratorRole")]
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
@@ -137,6 +143,7 @@ namespace EstadioAAAWeb.Controllers
         // POST: Events/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "RequireAdministratorRole")]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var @event = await _context.Event.FindAsync(id);

@@ -1,13 +1,14 @@
 ﻿@model IEnumerable<EstadioAAAWeb.Models.Ticket>
-
+@using Microsoft.AspNetCore.Authorization;
+@inject IAuthorizationService AuthorizationService
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Lista de tickets</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn-primary btn" asp-action="Create">Crear Nuevo</a>
 </p>
 <table class="table">
     <thead>
@@ -22,20 +23,28 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserRUT)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Event.EventUUID)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.TicketUUID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.TicketUUID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.TicketUUID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserRUT)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Event.EventUUID)
+                </td>
+                <td>
+
+                    <a class="btn-primary btn" asp-action="Details" asp-route-id="@item.TicketUUID">Detalles</a>
+
+                    @if ((await AuthorizationService.AuthorizeAsync(User, "RequireAdministratorRole")).Succeeded)
+                    {
+                        <a class="btn-primary btn" asp-action="Edit" asp-route-id="@item.TicketUUID">Editar</a>
+                        <a class="btn-danger btn" asp-action="Delete" asp-route-id="@item.TicketUUID">Eliminar</a>
+                    }
+
+
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
