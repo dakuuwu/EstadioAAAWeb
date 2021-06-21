@@ -1,0 +1,66 @@
+﻿@model IEnumerable<ApplicationUser>
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Lista de usuarios</h1>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    ID
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>
+                    Verificado
+                </th>
+                <th>
+                    RUT
+                </th>
+                <th>
+                    N° Teléfono
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @if(item.EmailConfirmed == true)
+                    {
+                            <p>✔</p>
+                    }
+                        else
+                    {
+                            <p>❌</p>
+                    }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RUT)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PhoneNumber)
+                    </td>
+                    <td>
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+} else {
+
+}

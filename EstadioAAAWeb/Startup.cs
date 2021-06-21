@@ -37,10 +37,17 @@ namespace EstadioAAAWeb
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RequireAdministratorRole",
+                     policy => policy.RequireRole("Administrador"));
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider, UserManager<ApplicationUser> usr, RoleManager<IdentityRole> rol)
         {
             if (env.IsDevelopment())
             {
@@ -105,6 +112,7 @@ namespace EstadioAAAWeb
                 if (createPowerUser.Succeeded)
                 {
                     await UserManager.AddToRoleAsync(superuser, "Administrador");
+
                 }
             }
         }
