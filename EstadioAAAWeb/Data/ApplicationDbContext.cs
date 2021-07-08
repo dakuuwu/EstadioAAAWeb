@@ -16,5 +16,6 @@ namespace EstadioAAAWeb.Data
         public DbSet<Event> Event { get; set; }
         public DbSet<Ticket> Ticket { get; set; }
         public DbSet<Receipt> Receipt { get; set; }
+        public DbSet<Email> Email { get; set; }
     }
 }
